@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:57:07 by root              #+#    #+#             */
-/*   Updated: 2021/12/03 16:31:45 by root             ###   ########.fr       */
+/*   Updated: 2021/12/06 23:35:03 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,34 @@ struct pair {
 } ;
 
 template<typename T1, typename T2>
-bool	operator == (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) {}
+bool	operator == (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) {
+	return (lhs.first == rhs.first) && (lhs.second == rhs.second);
+}
+
+template<typename T1, typename T2>
+bool	operator != (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) {
+	return !(lhs == rhs);
+}
+
+template<typename T1, typename T2>
+bool	operator < (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) {
+	return lhs.first < rhs.first || ((lhs.first == rhs.first) && lhs.second < rhs.second);
+}
+
+template<typename T1, typename T2>
+bool	operator > (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) {
+	return rhs < lhs;
+}
+
+template<typename T1, typename T2>
+bool	operator <= (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) {
+	return !(lhs > rhs);
+}
+
+template<typename T1, typename T2>
+bool	operator >= (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) {
+	return !(lhs < rhs);
+}
 
 }
 

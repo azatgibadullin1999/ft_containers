@@ -1,31 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   iterators.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/11 12:21:51 by root              #+#    #+#             */
-/*   Updated: 2021/12/21 16:10:41 by root             ###   ########.fr       */
+/*   Created: 2021/12/07 11:11:15 by root              #+#    #+#             */
+/*   Updated: 2021/12/21 14:09:58 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
-#include <vector>
-#include <memory>
-#include <exception>
-#include "Vector.hpp"
-#include "Stack.hpp"
-#include "utils.hpp"
-#include <stdlib.h>
-#include <algorithm>
-#include <iostream>
-#include <vector>
-#include <string_view>
-#include <map>
-#include <list>
+#ifndef ITERATORS_HPP
+# define ITERATORS_HPP
 
-int		main(void)
-{
-	return 0;
-}
+# include "./iterators/VectorIterator.hpp"
+# include "./iterators/MapIterator.hpp"
+
+#endif
