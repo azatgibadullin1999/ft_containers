@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 17:51:27 by root              #+#    #+#             */
-/*   Updated: 2021/12/16 19:28:43 by root             ###   ########.fr       */
+/*   Updated: 2021/12/29 17:01:25 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,29 +56,41 @@ class vector {
 			//	MEMBER FUNCIONS
 
 		vector() :
-		_size(0), _capacity(0), _vec(nullptr), _alloc(allocator_type()) { }
+			_size(0),
+			_capacity(0),
+			_vec(nullptr),
+			_alloc(allocator_type()) { }
 
 		explicit vector(const allocator_type alloc) :
-		_size(0), _capacity(0), _vec(nullptr), _alloc(alloc) { } 
+			_size(0),
+			_capacity(0),
+			_vec(nullptr),
+			_alloc(alloc) { } 
 
-		explicit vector(size_type count, const_reference value = T(), allocator_type alloc = allocator_type()) :
-		_alloc(alloc) {
-			__hidden_constructor(count, value, true_type());
-		}
+		explicit vector(size_type count,
+						const_reference value = T(),
+						allocator_type alloc = allocator_type()) :
+							_alloc(alloc) {
+								__hidden_constructor(count, value, true_type());
+							}
 
 		template <typename InputIt>
-		vector(InputIt first, InputIt last, const allocator_type alloc = allocator_type()) :
-		_alloc(alloc) {
-			typedef typename ft::is_integral<InputIt>::type		integral;
-			__hidden_constructor(first, last, integral());
-		}
+		vector(InputIt first,
+				InputIt last,
+				const allocator_type alloc = allocator_type()) :
+					_alloc(alloc) {
+						typedef typename ft::is_integral<InputIt>::type		integral;
+						__hidden_constructor(first, last, integral());
+					}
 
 		vector(const vector &other) :
-		_size(other._size), _capacity(other._capacity), _alloc(other._alloc) {
-			this->_vec = this->_alloc.allocate(this->_capacity);
-			for (size_type i = 0; i < this->_size; i++)
-				this->_alloc.construct(&this->_vec[i], other[i]);
-		}
+			_size(other._size),
+			_capacity(other._capacity),
+			_alloc(other._alloc) {
+				this->_vec = this->_alloc.allocate(this->_capacity);
+				for (size_type i = 0; i < this->_size; i++)
+					this->_alloc.construct(&this->_vec[i], other[i]);
+			}
 
 		~vector() {
 			if (this->_capacity != 0) {

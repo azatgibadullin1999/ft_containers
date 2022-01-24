@@ -6,12 +6,13 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 13:21:24 by root              #+#    #+#             */
-/*   Updated: 2021/12/03 15:21:27 by root             ###   ########.fr       */
+/*   Updated: 2021/12/28 16:22:46 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef IS_INTEGRAL_HPP
 # define IS_INTEGRAL_HPP
+
 
 namespace ft {
 
@@ -83,5 +84,6 @@ template <typename T>
 
 
 }
+
 
 #endif

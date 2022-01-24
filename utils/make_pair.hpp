@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 15:20:12 by root              #+#    #+#             */
-/*   Updated: 2021/12/03 15:29:09 by root             ###   ########.fr       */
+/*   Updated: 2021/12/28 16:22:54 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MAKE_PAIR_HPP
 
 # include "pair.hpp"
+
 
 namespace ft {
 
@@ -25,5 +26,6 @@ ft::pair<T1, T2>	make_pair(T1 _first, T2 _secnod) {
 
 
 }
+
 
 #endif

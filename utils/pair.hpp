@@ -6,12 +6,13 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:57:07 by root              #+#    #+#             */
-/*   Updated: 2021/12/06 23:35:03 by root             ###   ########.fr       */
+/*   Updated: 2021/12/28 16:23:00 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PAIR_HPP
 # define PAIR_HPP
+
 
 namespace ft {
 
@@ -35,6 +36,9 @@ struct pair {
 		template <typename U1, typename U2>
 		pair(const pair<U1, U2>& _p) :
 		first(_p.first), second(_p.second) { }
+
+		pair(const pair &other) :
+		first(other.first), second(other.first) { }
 
 
 		pair	&operator = (const pair& other) {
@@ -74,6 +78,8 @@ bool	operator >= (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) {
 	return !(lhs < rhs);
 }
 
+
 }
+
 
 #endif

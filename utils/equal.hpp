@@ -6,12 +6,13 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 16:36:15 by root              #+#    #+#             */
-/*   Updated: 2021/12/03 17:03:01 by root             ###   ########.fr       */
+/*   Updated: 2021/12/28 16:22:43 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EQUAL_HPP
 # define EQUAL_HPP
+
 
 namespace ft {
 
@@ -36,5 +37,6 @@ bool	equal(InputIt1 first1, InputIt1 last1, InputIt2 first2, BinaryPredicate p) 
 
 	
 }
+
 
 #endif

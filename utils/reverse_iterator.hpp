@@ -6,12 +6,13 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 13:24:07 by root              #+#    #+#             */
-/*   Updated: 2021/12/16 19:34:44 by root             ###   ########.fr       */
+/*   Updated: 2021/12/28 16:23:06 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REVERSE_ITERATOR_HPP
 # define REVERSE_ITERATOR_HPP
+
 
 namespace ft {
 
@@ -27,7 +28,7 @@ class reverse_iterator : public std::iterator <
 	
 	protected :
 
-		typedef iterator_traits<Iterator>			iterator_traits;
+		typedef ft::iterator_traits<Iterator>			iterator_traits;
 
 	public :
 
@@ -179,5 +180,6 @@ operator - (ft::reverse_iterator<T_L> lhs,
 
 
 }
+
 
 #endif

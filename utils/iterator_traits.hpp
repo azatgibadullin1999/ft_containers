@@ -6,12 +6,13 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 13:22:18 by root              #+#    #+#             */
-/*   Updated: 2021/12/14 14:59:12 by root             ###   ########.fr       */
+/*   Updated: 2021/12/28 16:22:48 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ITERATOR_TRAITS_HPP
 # define ITERATOR_TRAITS_HPP
+
 
 namespace ft {
 
@@ -45,5 +46,6 @@ struct iterator_traits<const T*> {
 
 
 }
+
 
 #endif

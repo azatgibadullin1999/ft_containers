@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 16:46:50 by root              #+#    #+#             */
-/*   Updated: 2021/12/15 14:11:06 by root             ###   ########.fr       */
+/*   Updated: 2021/12/23 20:35:58 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ class stack {
 		~stack() { }
 
 		stack	&operator = (const stack &other) {
-			this->_cont = other->_cont;
-			return this->_cont;
+			this->_cont = other._cont;
+			return *this;
 		}
 
 		reference			top() { return *--this->_cont.end(); }
