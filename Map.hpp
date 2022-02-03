@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 14:53:58 by root              #+#    #+#             */
-/*   Updated: 2021/12/21 17:51:59 by root             ###   ########.fr       */
+/*   Updated: 2022/02/03 15:02:37 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 # include <functional>
 # include <iterator>
-# include "utils.hpp"
 # include "iterators.hpp"
+# include "utils.hpp"
 
 namespace ft {
 
@@ -25,144 +25,289 @@ template <
 		typename Key,
 		typename T,
 		typename Compare = std::less<Key>,
-		typename Allocator = std::allocator<std::pair<const Key, T> >
+		typename Allocator = std::allocator< std::pair<const Key, T> >
 		>
 class map {
 
 	public :
 
-		typedef Key										key_type;
-		typedef T										mapped_type;
-		typedef ft::pair<const Key, T>					value_type;
-		typedef std::size_t								size_type;
-		typedef std::ptrdiff_t							difference_type;
-		typedef Compare									key_compare;
-		typedef Allocator								allocator_type;
-		typedef typename Allocator::reference			reference;
-		typedef typename Allocator::const_reference		const_reference;
-		typedef typename Allocator::pointer				pointer;
-		typedef typename Allocator::const_pointer		const_pointer;
-		// iterator
-		// const_iterator
-		// reverse_iterator
-		// const_reverse_iterator
+		// Public typedefs
+
+		typedef Key														key_type;
+		typedef T														mapped_type;
+		typedef ft::pair<const Key, T>									value_type;
+		typedef std::size_t												size_type;
+		typedef std::ptrdiff_t											difference_type;
+		typedef Compare													key_compare;
+		typedef Allocator												allocator_type;
+		typedef typename Allocator::reference							reference;
+		typedef typename Allocator::const_reference						const_reference;
+		typedef typename Allocator::pointer								pointer;
+		typedef typename Allocator::const_pointer						const_pointer;
+		typedef binary_tree_iterator<const key_type, mapped_type>		iterator;
+		typedef binary_tree_iterator<const key_type, const mapped_type>	const_iterator;
+		typedef ft::reverse_iterator<iterator>							reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>					const_reverse_iterator;
 
 	private :
 
-		typedef ft::Node<value_type>								_node;
+		//	Private Node's typedefs
+
+		typedef binary_node<value_type>								_node;
 		typedef typename Allocator::template rebind<_node>::other	_node_allocator_type;
-		typedef	typename _node_allocator_type::pointer				_node_pointer;
-		typedef	typename _node_allocator_type::const_pointer		_node_const_pointer;
+		typedef typename _node_allocator_type::pointer				_node_pointer;
 		typedef typename _node_allocator_type::reference			_node_reference;
-		typedef typename _node_allocator_type::const_reference		_node_const_reference;
+
+		//	Private variables
 
 		size_type				_size;
-		_node_pointer			_node_begin;
+		key_compare				_comp;
+		allocator_type			_alloc;
+
 		_node_allocator_type	_node_alloc;
+		_node_pointer			_root;
+		_node_pointer			_last_left;
+		_node_pointer			_last_right;
+		_node_pointer			_nil;
 
 	public :
+
 		//	Member class
 
-		Compare					_comp;
+		Compare					value_compare;
 
 		//	Member fuctions
 
 		map() :
-		_comp(), _node_alloc(), _node_begin(nullptr) { }
+			_comp(),
+			_node_alloc(),
+			_root(nullptr),
+			_nil(_node_alloc().allocate) {
+				__node_init(_nil, nullptr, _nil->left);
+			}
 
 		explicit map(const Compare &comp,
 					const Allocator &alloc = Allocator()) :
-					_comp(comp), _node_alloc(alloc), _node_begin(nullptr) { }
+						_comp(comp),
+						_node_alloc(alloc),
+						_root(nullptr),
+						_nil(_node_alloc().allocate) {
+							__node_init(_nil, nullptr, _nil->left);
+						}
 
 		template <typename InputIt>
 		map(InputIt first,
 			InputIt last,
 			const Compare &comp = Compare(),
 			const Allocator &alloc = Allocator()) :
-			_comp(comp), _node_alloc(alloc) { }
+				_comp(comp),
+				_node_alloc(alloc),
+				_root(nullptr),
+				_nil(_node_alloc().allocate) {
+					__node_init(_nil, nullptr, _nil->left);
+					insert(first, last);
+				}
 
 		map(const map &other) :
-		_comp(other._comp), _node_alloc(other._node_alloc) {
-			__post_iter(other._node_begin, __copy_constructor());
-		}
+			_comp(other._comp),
+			_node_alloc(other._node_alloc),
+			_root(nullptr),
+			_nil(_node_alloc().allocate) {
+				__node_init(_nil, nullptr, _nil->left);
+				insert(other.begin(), other.end());
+			}
 
 		~map() {
-			__prev_iter(this->_node_begin, __destroy());
+			__prev_iter(_root, __node_destroy());
+			__node_destroy(_nil);
 		}
 
 		map		&operator = (const map &other) {
-			_node_pointer p = this->_node_begin;
+			if (this == &other)
+				return *this;
+			clear();
+			insert(other.begin(), other.end());
 		}
 
-		allocator_type	get_allocator() const { }
+		allocator_type	get_allocator() const {
+			return _alloc;
+		}
 
 		//	Element access
 
-		// -
+		mapped_type		&at(const key_type &key) {
+			_node_pointer dst = __finde(key);
+			if (_comp(dst->value->first, key) && _comp(key, dst->value->fist))
+				return dst->value->second;
+			else
+				throw std::out_of_range("out of range");
+		}
+
+		mapped_type		&operator [] (const key_type &key) {
+			_node_pointer dst = __finde(key);
+			if (_comp(dst->value->first, key) && _comp(key, dst->value->fist))
+				return dst->value->second;
+			else
+				return __insert(__node_create(ft::make_pair(key, mapped_type())))->value->second;
+		}
+
+		//	Iterators
+
+		iterator		begin() {
+			return iterator(_last_left);
+		}
+		
+		const_iterator	begin() const {
+			return const_iterator(_last_left);
+		}
+
+		iterator		end() {
+			return iterator(_nil);
+		}
+
+		const_iterator	end() const {
+			return const_iterator(_nil);
+		}
+
+		reverse_iterator		rbegin() {
+			return reverse_iterator(end());
+		}
+
+		const_reverse_iterator	rbegin() const {
+			return const_reverse_iterator(end());
+		}
+
+		reverse_iterator		rend() {
+			return reverse_iterator(begin());
+		}
+
+		const_reverse_iterator	rend() const {
+			return const_reverse_iterator(begin());
+		}
 
 		//	Capacity
 
-		bool		empty() const { return !this->_size; }
+		bool		empty() const { return !_size; }
 
-		size_type	size() const { return this->_size; }
+		size_type	size() const { return _size; }
 
 		size_type	max_size() const { }
 
 		//	Modifiers
 
 		void		clear() {
-			__prev_iter(this->_node_begin, __destroy);
+			__prev_iter(_root, __node_destroy());
 		}
 
 		ft::pair<iterator, bool>	insert(const_reference value) {
+			_node_pointer new_node = __node_create(value);
+			_node_pointer returned_node = __insert(new_node);
 
+			if (returned_node == new_node)
+				return ft::make_pair(iterator(new_node), true);
+			else {
+				__node_destroy(new_node);
+				return ft::make_pair(iterator(returned_node), false);
+			}
 		}
 
 		iterator					insert(iterator hint, const_reference value) {
-
+			(void)hint;
+			return insert(value).iterator;
 		}
 
 		template <typename InputIt>
 		void	insert(InputIt first, InputIt last) {
-
+			while (first != last)
+				insert(*first++);
 		}
 
-		
 	private :
 
-		void	__destroy(_node_pointer node) {
-			this->_node_alloc.destroy(node);
-			this->_node_alloc.deallocate(node, 1);
+		_node_pointer	__insert(_node_pointer new_node) {
+			if (empty()) {
+				_root = __node_init(new_node, nullptr, new_node->left);
+				_last_left = _root;
+				_last_right = _root;
+				_nil->parent = _last_right;
+				return _root;
+			}
+			else {
+				_node_pointer	parent = __iter_comp(_root, new_node->value.first);
+				if (_comp(parent->value.first, new_node->value.first)) {
+					if (parent == _last_left)
+						_last_left = new_node;
+					return __node_init(new_node, parent, parent->left);
+				}
+				else if (_comp(new_node->value.first, parent->value.first)) {
+					if (parent == _last_right) {
+						_last_right = new_node;
+						_nil->parent = _last_right;
+					}
+					return __node_init(new_node, parent, parent->right);
+				}
+				return parent;
+			}
 		}
 
-		void	__copy_constructor(_node_pointer other_node) {
-
+		_node_pointer	__finde(key_type key) {
+			if (empty())
+				return _nil;
+			return __iter_comp(_root, key);
 		}
 
-		void	__prev_iter(_node_pointer node, void (*func)(_node_pointer)) {
-			if (node == nullptr)
+		_node_pointer	__iter_comp(_node_pointer p, key_type key) {
+			if (_comp(p->value.first, key)) {
+				if (p->left != _nil)
+					return __iter_comp(p->left, key);
+			}
+			else if (p->right != _nil)
+				return __iter_comp(p->right, key);
+			return p;
+		}
+
+		void			__prev_iter(_node_pointer node, void (*func)(_node_pointer)) {
+			if (node == _nil)
 				return ;
-			__delete_all_elemets(node->left);
-			__delete_all_elemets(node->right);
+			__prev_iter(node->left, func);
+			__prev_iter(node->right, func);
 			func(node);
 		}
 		
-		void	__post_iter(_node_pointer node, void (*func)(_node_pointer)) {
-			if (node == nullptr)
+		void			__post_iter(_node_pointer node, void (*func)(_node_pointer)) {
+			if (node == _nil)
 				return ;
 			func(node);
-			__delete_all_elemets(node->left);
-			__delete_all_elemets(node->right);
+			__post_iter(node->left, func);
+			__post_iter(node->right, func);
 		}
 
-		void	__balancing_tree() {
-				
+		_node_pointer	__node_init(_node_pointer new_node, _node_pointer parent, _node_pointer &parent_direction) {
+			parent_direction = new_node;
+			new_node->parent = parent;
+			new_node->left = _nil;
+			new_node->right = _nil;
+			return new_node;
 		}
 
+		_node_pointer	__node_create(const_reference value) {
+			_node_pointer	new_node = _node_alloc.allocate(1);
+			_node_alloc.construct(new_node);
+			new_node->value = _alloc.allocate(1);
+			_alloc.construct(new_node->value, value);
+		}
+
+		void			__node_destroy(_node_pointer elem) {
+			_alloc.destroy(elem->value);
+			_alloc.deallocate(elem->value, 1);
+			_node_alloc.destory(elem);
+			_node_alloc.deallocate(elem, 1);
+		}
 
 } ;
 
 
 }
+
 
 #endif
