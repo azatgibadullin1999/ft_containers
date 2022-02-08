@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 14:53:58 by root              #+#    #+#             */
-/*   Updated: 2022/02/08 19:55:20 by root             ###   ########.fr       */
+/*   Updated: 2022/02/08 22:23:44 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,19 +201,17 @@ class map {
 		//	Modifiers
 
 		void		clear() {
-			__prev_iter(_root, __node_destroy());
+			__prev_iter(_root, &map::__node_destroy);
+			__node_init(_nil);
+			_root = nullptr;
+			_last_left = nullptr;
+			_last_right = nullptr;
+			_size = 0;
 		}
 
 		ft::pair<iterator, bool>	insert(const_reference value) {
 			_node_pointer new_node = __node_create(value);
 			_node_pointer returned_node = __insert(new_node);
-
-			// std::cout << "=====================" << std::endl;
-			// std::cout << new_node << std::endl;
-			// std::cout << new_node->parent << std::endl;
-			// std::cout << new_node->parent->left << std::endl;
-			// std::cout << new_node->parent->right << std::endl;
-			// std::cout << "=====================" << std::endl;
 
 			if (returned_node == new_node) {
 				++_size;
