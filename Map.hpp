@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 14:53:58 by root              #+#    #+#             */
-/*   Updated: 2022/02/08 22:23:44 by root             ###   ########.fr       */
+/*   Updated: 2022/02/09 17:18:28 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,19 +235,84 @@ class map {
 		}
 
 		void	erase(iterator pos) {
-			
+			__erase(pos._M_node);
+			if (pos._M_node == _root) {
+				if (pos._M_node->left != _nil)
+					_root = pos._M_node->left;
+				else if (pos._M_node->right != _nil)
+					_root = pos._M_node->right;
+			}
 			__node_destroy(pos._M_node);
+			--_size;
 		}
 
 		void	erase(iterator first, iterator last) {
 			while (first != last)
-				erase(first);
+				erase(first++);
+		}
+		
+		iterator	getRoot() const {
+			return iterator(_root);
 		}
 
 	private :
 
-		_node_pointer	__erase(_node_pointer node) {
+		void		__erase(_node_pointer node) {
+			if (node->left != _nil) {
+				__rebalance_left(node);
+				if (node->parent != _nil) {
+					__get_parent_direction(node) = node->left;
+					node->left->parent = node->parent;
+				} else {
+					node->left->parent = _nil;
+				}
+			}
+			else if (node->right != _nil) {
+				__rebalance_right(node);
+				if (node->parent != _nil) {
+					__get_parent_direction(node) = node->right;
+					node->right->parent = node->parent;
+				} else {
+					node->left->parent = _nil;
+				}
+			}
+			else if (node->parent != _nil) {
+				__get_parent_direction(node) = _nil;
+			}
+		}
 
+		void		__rebalance_left(_node_pointer node) {
+			if (node->right != _nil) {
+				_node_pointer	tmp;
+
+				tmp = __tree_down_to_last_right(node->left);
+				tmp->right = node->right;
+				tmp->right->parent = tmp;
+				node->right = _nil;
+			}
+		}
+
+		void		__rebalance_right(_node_pointer node) {
+			if (node->left != _nil) {
+				_node_pointer	tmp;
+
+				tmp = __tree_down_to_last_left(node->right);
+				tmp->left = node->left;
+				tmp->right->parent = tmp;
+				node->left = _nil;
+			}
+		}
+
+		_node_pointer	__tree_down_to_last_left(_node_pointer p) {
+			if (p->LAST_LEFT != nullptr)
+				return __tree_down_to_last_left(p->left);
+			return p;
+		}
+
+		_node_pointer	__tree_down_to_last_right(_node_pointer p) {
+			if (p->LAST_RIGHT != nullptr)
+				return __tree_down_to_last_right(p->right);
+			return p;
 		}
 
 		_node_pointer	__insert(_node_pointer new_node) {
@@ -342,6 +407,13 @@ class map {
 			_alloc.deallocate(elem->value, 1);
 			_node_alloc.destroy(elem);
 			_node_alloc.deallocate(elem, 1);
+		}
+
+		_node_pointer	&__get_parent_direction(_node_pointer node) {
+			if (node->parent->right == node)
+				return node->parent->right;
+			else
+				return node->parent->left;
 		}
 
 } ;
