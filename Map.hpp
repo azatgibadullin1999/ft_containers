@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 14:53:58 by root              #+#    #+#             */
-/*   Updated: 2022/02/11 01:06:45 by root             ###   ########.fr       */
+/*   Updated: 2022/02/11 01:08:22 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ class map {
 		//	Element access
 
 		mapped_type		&at(const key_type &key) {
-			_node_pointer dst = __finde(key);
+			_node_pointer dst = __find(key);
 			if (_comp(dst->value->first, key) && _comp(key, dst->value->fist))
 				return dst->value->second;
 			else
@@ -149,7 +149,7 @@ class map {
 		}
 
 		mapped_type		&operator [] (const key_type &key) {
-			_node_pointer dst = __finde(key);
+			_node_pointer dst = __find(key);
 			if (_comp(dst->value->first, key) && _comp(key, dst->value->fist))
 				return dst->value->second;
 			else
@@ -258,7 +258,7 @@ class map {
 		//	Lookup
 
 		size_type		count(const key_type &key) const {
-			_node_pointer	node = __finde(key);
+			_node_pointer	node = __find(key);
 			
 			if (empty())
 				return 0;
@@ -266,7 +266,7 @@ class map {
 		}
 
 		iterator		find(const Key &key) {
-			_node_pointer	node = __finde(key);
+			_node_pointer	node = __find(key);
 
 			if (node == _nil || node->first != key)
 				return end();
@@ -274,7 +274,7 @@ class map {
 		}
 
 		const_iterator	find(const Key &key) const {
-			_node_pointer	node = __finde(key);
+			_node_pointer	node = __find(key);
 
 			if (node == _nil || node->first != key)
 				return end();
@@ -374,7 +374,7 @@ class map {
 			}
 		}
 
-		_node_pointer	__finde(const key_type key) const {
+		_node_pointer	__find(const key_type key) const {
 			if (empty())
 				return _nil;
 			return __iter_comp(_root, key);
