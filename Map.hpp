@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 14:53:58 by root              #+#    #+#             */
-/*   Updated: 2022/02/09 17:18:28 by root             ###   ########.fr       */
+/*   Updated: 2022/02/11 01:06:45 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,9 +250,39 @@ class map {
 			while (first != last)
 				erase(first++);
 		}
-		
-		iterator	getRoot() const {
-			return iterator(_root);
+
+		void	swap(map &other) {
+
+		}
+
+		//	Lookup
+
+		size_type		count(const key_type &key) const {
+			_node_pointer	node = __finde(key);
+			
+			if (empty())
+				return 0;
+			return node->first == key;
+		}
+
+		iterator		find(const Key &key) {
+			_node_pointer	node = __finde(key);
+
+			if (node == _nil || node->first != key)
+				return end();
+			return iterator(node);		
+		}
+
+		const_iterator	find(const Key &key) const {
+			_node_pointer	node = __finde(key);
+
+			if (node == _nil || node->first != key)
+				return end();
+			return const_iterator(node);
+		}
+
+		iterator		upper_bound(const Key &key) {
+			
 		}
 
 	private :
@@ -273,7 +303,7 @@ class map {
 					__get_parent_direction(node) = node->right;
 					node->right->parent = node->parent;
 				} else {
-					node->left->parent = _nil;
+					node->right->parent = _nil;
 				}
 			}
 			else if (node->parent != _nil) {
@@ -344,7 +374,7 @@ class map {
 			}
 		}
 
-		_node_pointer	__finde(key_type key) {
+		_node_pointer	__finde(const key_type key) const {
 			if (empty())
 				return _nil;
 			return __iter_comp(_root, key);
