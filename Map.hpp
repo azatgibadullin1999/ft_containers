@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 14:53:58 by root              #+#    #+#             */
-/*   Updated: 2022/02/11 01:08:22 by root             ###   ########.fr       */
+/*   Updated: 2022/02/13 13:57:47 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,10 @@ class map {
 		allocator_type			_alloc;
 
 		_node_allocator_type	_node_alloc;
+		_node_pointer			_nil;
 		_node_pointer			_root;
 		_node_pointer			_last_left;
 		_node_pointer			_last_right;
-		_node_pointer			_nil;
 
 	public :
 
@@ -82,8 +82,10 @@ class map {
 			_size(0),
 			_comp(),
 			_node_alloc(),
-			_root(nullptr),
-			_nil(_node_alloc.allocate(1)) {
+			_nil(_node_alloc.allocate(1)),
+			_root(_nil),
+			_last_left(_nil),
+			_last_right(_nil) {
 				__node_init(_nil);
 			}
 
@@ -92,8 +94,10 @@ class map {
 						_size(0),
 						_comp(comp),
 						_node_alloc(alloc),
-						_root(nullptr),
-						_nil(_node_alloc.allocate(1)) {
+						_nil(_node_alloc.allocate(1)),
+						_root(_nil),
+						_last_left(_nil),
+						_last_right(_nil) {
 							__node_init(_nil);
 						}
 
@@ -105,8 +109,10 @@ class map {
 				_size(0),
 				_comp(comp),
 				_node_alloc(alloc),
-				_root(nullptr),
-				_nil(_node_alloc.allocate(1)) {
+				_nil(_node_alloc.allocate(1)),
+				_root(_nil),
+				_last_left(_nil),
+				_last_right(_nil) {
 					__node_init(_nil);
 					insert(first, last);
 				}
@@ -115,8 +121,10 @@ class map {
 			_size(0),
 			_comp(other._comp),
 			_node_alloc(other._node_alloc),
-			_root(nullptr),
-			_nil(_node_alloc.allocate(1)) {
+			_nil(_node_alloc.allocate(1)),
+			_root(_nil),
+			_last_left(_nil),
+			_last_right(_nil) {
 				__node_init(_nil);
 				insert(other.begin(), other.end());
 			}
@@ -142,18 +150,18 @@ class map {
 
 		mapped_type		&at(const key_type &key) {
 			_node_pointer dst = __find(key);
-			if (_comp(dst->value->first, key) && _comp(key, dst->value->fist))
-				return dst->value->second;
-			else
+			if (dst == _nil)
 				throw std::out_of_range("out of range");
+			else
+				return dst->value->second;
 		}
 
 		mapped_type		&operator [] (const key_type &key) {
 			_node_pointer dst = __find(key);
-			if (_comp(dst->value->first, key) && _comp(key, dst->value->fist))
-				return dst->value->second;
-			else
+			if (dst == _nil)
 				return __insert(__node_create(ft::make_pair(key, mapped_type())))->value->second;
+			else
+				return dst->value->second;
 		}
 
 		//	Iterators
@@ -259,30 +267,40 @@ class map {
 
 		size_type		count(const key_type &key) const {
 			_node_pointer	node = __find(key);
-			
-			if (empty())
-				return 0;
-			return node->first == key;
+
+			return node != _nil;
 		}
 
-		iterator		find(const Key &key) {
-			_node_pointer	node = __find(key);
-
-			if (node == _nil || node->first != key)
-				return end();
-			return iterator(node);		
+		iterator		find(const key_type &key) {
+			return iterator(__find(key));		
 		}
 
-		const_iterator	find(const Key &key) const {
-			_node_pointer	node = __find(key);
-
-			if (node == _nil || node->first != key)
-				return end();
-			return const_iterator(node);
+		const_iterator	find(const key_type &key) const {
+			return const_iterator(__find(key));
 		}
 
-		iterator		upper_bound(const Key &key) {
-			
+		iterator		upper_bound(const key_type &key) {
+			return iterator(__upper_bound(_root, key));
+		}
+
+		const_iterator	upper_bound(const key_type &key) const {
+			return const_iterator(__upper_bound(_root, key));
+		}
+
+		iterator		lower_bound(const key_type &key) {
+			return iterator(__lower_bound(_root, key));
+		}
+
+		const_iterator	lower_bound(const key_type &key) const {
+			return const_iterator(__lower_bound(_root, key));
+		}
+
+		ft::pair<iterator, iterator>				equeal_range(const key_type &key) {
+			return ft::make_pair(__lower_bound(_root, key), __upper_bound(_root, key));
+		}
+
+		ft::pair<const_iterator, const_iterator>	equeal_range(const key_type &key) const {
+			return ft::make_pair(__lower_bound(_root, key), __upper_bound(_root, key));
 		}
 
 	private :
@@ -374,21 +392,37 @@ class map {
 			}
 		}
 
-		_node_pointer	__find(const key_type key) const {
-			if (empty())
-				return _nil;
-			return __iter_comp(_root, key);
+		_node_pointer	__find(_node_pointer p, const key_type &key) const {
+			if (p == _nil)
+				return p;
+			else if (_comp(key, p->value->first))
+				return __find(p->left, key);
+			else if (_comp(p->value->first, key))
+				return __find(p->right, key);
+			return p;
 		}
 
-		_node_pointer	__iter_comp(_node_pointer p, key_type key) {
-			if (_comp(key, p->value->first)) {
-				if (p->left != _nil)
-					return __iter_comp(p->left, key);
-			}
-			else if (_comp(p->value->first, key)) {
-				if (p->right != _nil)
-					return __iter_comp(p->right, key);
-			}
+		_node_pointer	__iter_comp(_node_pointer p, const key_type &key) {
+			if (_comp(key, p->value->first) && p->left != _nil)
+				return __iter_comp(p->left, key);
+			else if (_comp(p->value->first, key) && p->right != _nil)
+				return __iter_comp(p->right, key);
+			return p;
+		}
+
+		_node_pointer	__lower_bound(_node_pointer p, const key_type &key) {
+			if (p == _nil)
+				return p;
+			else if (_comp(key, p->value->first))
+				return __lower_bound(p, key);
+			return p;
+		}
+
+		_node_pointer	__upper_bound(_node_pointer p, const key_type &key) {
+			if (p == _nil)
+				return p;
+			else if (_comp(p->value->first, key))
+				return __upper_bound(p, key);
 			return p;
 		}
 
