@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:57:07 by root              #+#    #+#             */
-/*   Updated: 2022/02/05 19:45:34 by root             ###   ########.fr       */
+/*   Updated: 2022/02/13 19:42:40 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ struct pair {
 		pair	&operator = (const pair& other) {
 			this->first = other.first;
 			this->second = other.second;
+			return *this;
 		}
 
 } ;
