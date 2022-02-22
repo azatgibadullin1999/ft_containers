@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 14:53:58 by root              #+#    #+#             */
-/*   Updated: 2022/02/22 13:35:10 by root             ###   ########.fr       */
+/*   Updated: 2022/02/22 15:29:15 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,19 +295,19 @@ class map {
 		}
 
 		iterator		upper_bound(const key_type &key) {
-			return iterator(__upper_bound(_root, key));
+			return iterator(__upper_bound(key));
 		}
 
 		const_iterator	upper_bound(const key_type &key) const {
-			return const_iterator(__upper_bound(_root, key));
+			return const_iterator(__upper_bound(key));
 		}
 
 		iterator		lower_bound(const key_type &key) {
-			return iterator(__lower_bound(_root, key));
+			return iterator(__lower_bound(key));
 		}
 
 		const_iterator	lower_bound(const key_type &key) const {
-			return const_iterator(__lower_bound(_root, key));
+			return const_iterator(__lower_bound(key));
 		}
 
 		ft::pair<iterator, iterator>				equal_range(const key_type &key) {
@@ -319,6 +319,24 @@ class map {
 		}
 
 	private :
+
+		_node_pointer	__lower_bound(const key_type &key) const {
+			_node_pointer	dst = _last_left;
+
+			while (dst != _nil && _comp(dst->value->first, key))
+				dst = __tree_increment(dst);
+
+			return dst;
+		}
+
+		_node_pointer	__upper_bound(const key_type &key) const {
+			_node_pointer	dst = _last_left;
+
+			while (dst != _nil && _comp(key, dst->value->first))
+				dst = __tree_increment(dst);
+
+			return dst;
+		}
 
 		void		__erase(_node_pointer node) {
 			__tree_rebalance(node);
