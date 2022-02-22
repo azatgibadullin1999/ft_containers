@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 19:55:24 by root              #+#    #+#             */
-/*   Updated: 2022/02/03 15:07:45 by root             ###   ########.fr       */
+/*   Updated: 2022/02/13 18:56:12 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include "./utils/equal.hpp"
 # include "./utils/iterator_traits.hpp"
 # include "./utils/reverse_iterator.hpp"
+# include "./utils/binary_tree_utils.hpp"
 # include "./utils/node.hpp"
 
 #endif
