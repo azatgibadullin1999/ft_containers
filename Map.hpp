@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 14:53:58 by root              #+#    #+#             */
-/*   Updated: 2022/02/22 15:29:15 by root             ###   ########.fr       */
+/*   Updated: 2022/02/22 15:48:57 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,43 +169,26 @@ class map {
 		}
 
 		mapped_type		&operator [] (const key_type &key) {
-
 			return insert(ft::make_pair(key, mapped_type())).first._M_node->value->second;
 		}
 
 		//	Iterators
 
-		iterator				begin() {
-			return iterator(_last_left);
-		}
+		iterator				begin() { return iterator(_last_left); }
 		
-		const_iterator			begin() const {
-			return const_iterator(_last_left);
-		}
+		const_iterator			begin() const { return const_iterator(_last_left); }
 
-		iterator				end() {
-			return iterator(_nil);
-		}
+		iterator				end() { return iterator(_nil); }
 
-		const_iterator			end() const {
-			return const_iterator(_nil);
-		}
+		const_iterator			end() const { return const_iterator(_nil); }
 
-		reverse_iterator		rbegin() {
-			return reverse_iterator(end());
-		}
+		reverse_iterator		rbegin() { return reverse_iterator(end()); }
 
-		const_reverse_iterator	rbegin() const {
-			return const_reverse_iterator(end());
-		}
+		const_reverse_iterator	rbegin() const { return const_reverse_iterator(end()); }
 
-		reverse_iterator		rend() {
-			return reverse_iterator(begin());
-		}
+		reverse_iterator		rend() { return reverse_iterator(begin()); }
 
-		const_reverse_iterator	rend() const {
-			return const_reverse_iterator(begin());
-		}
+		const_reverse_iterator	rend() const { return const_reverse_iterator(begin()); }
 
 		//	Capacity
 
@@ -286,37 +269,21 @@ class map {
 			return node != _nil;
 		}
 
-		iterator		find(const key_type &key) {
-			return iterator(__find(_root, key));		
-		}
+		iterator		find(const key_type &key) { return iterator(__find(_root, key)); }
 
-		const_iterator	find(const key_type &key) const {
-			return const_iterator(__find(_root, key));
-		}
+		const_iterator	find(const key_type &key) const { return const_iterator(__find(_root, key)); }
 
-		iterator		upper_bound(const key_type &key) {
-			return iterator(__upper_bound(key));
-		}
+		iterator		upper_bound(const key_type &key) { return iterator(__upper_bound(key)); }
 
-		const_iterator	upper_bound(const key_type &key) const {
-			return const_iterator(__upper_bound(key));
-		}
+		const_iterator	upper_bound(const key_type &key) const { return const_iterator(__upper_bound(key)); }
 
-		iterator		lower_bound(const key_type &key) {
-			return iterator(__lower_bound(key));
-		}
+		iterator		lower_bound(const key_type &key) { return iterator(__lower_bound(key)); }
 
-		const_iterator	lower_bound(const key_type &key) const {
-			return const_iterator(__lower_bound(key));
-		}
+		const_iterator	lower_bound(const key_type &key) const { return const_iterator(__lower_bound(key)); }
 
-		ft::pair<iterator, iterator>				equal_range(const key_type &key) {
-			return ft::make_pair(lower_bound(key), upper_bound(key));
-		}
+		ft::pair<iterator, iterator>				equal_range(const key_type &key) { return ft::make_pair(lower_bound(key), upper_bound(key)); }
 
-		ft::pair<const_iterator, const_iterator>	equal_range(const key_type &key) const {
-			return ft::make_pair(lower_bound(key), upper_bound(key));
-		}
+		ft::pair<const_iterator, const_iterator>	equal_range(const key_type &key) const { return ft::make_pair(lower_bound(key), upper_bound(key)); }
 
 	private :
 
@@ -332,7 +299,7 @@ class map {
 		_node_pointer	__upper_bound(const key_type &key) const {
 			_node_pointer	dst = _last_left;
 
-			while (dst != _nil && _comp(key, dst->value->first))
+			while (dst != _nil && !_comp(key, dst->value->first))
 				dst = __tree_increment(dst);
 
 			return dst;
