@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 14:53:58 by root              #+#    #+#             */
-/*   Updated: 2022/02/13 13:57:47 by root             ###   ########.fr       */
+/*   Updated: 2022/02/22 13:35:10 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,12 @@
 # define MAP_HPP
 
 # include <functional>
-# include <iterator>
+# include <limits>
 # include "iterators.hpp"
 # include "utils.hpp"
+
+# include <iostream>
+# include <stdlib.h>
 
 namespace ft {
 
@@ -33,21 +36,21 @@ class map {
 
 		// Public typedefs
 
-		typedef Key														key_type;
-		typedef T														mapped_type;
-		typedef ft::pair<const Key, T>									value_type;
-		typedef std::size_t												size_type;
-		typedef std::ptrdiff_t											difference_type;
-		typedef Compare													key_compare;
-		typedef Allocator												allocator_type;
-		typedef typename Allocator::reference							reference;
-		typedef typename Allocator::const_reference						const_reference;
-		typedef typename Allocator::pointer								pointer;
-		typedef typename Allocator::const_pointer						const_pointer;
-		typedef binary_tree_iterator<const key_type, mapped_type>		iterator;
-		typedef binary_tree_iterator<const key_type, const mapped_type>	const_iterator;
-		typedef ft::reverse_iterator<iterator>							reverse_iterator;
-		typedef ft::reverse_iterator<const_iterator>					const_reverse_iterator;
+		typedef Key												key_type;
+		typedef T												mapped_type;
+		typedef ft::pair<const Key, T>							value_type;
+		typedef std::size_t										size_type;
+		typedef std::ptrdiff_t									difference_type;
+		typedef Compare											key_compare;
+		typedef Allocator										allocator_type;
+		typedef typename Allocator::reference					reference;
+		typedef typename Allocator::const_reference				const_reference;
+		typedef typename Allocator::pointer						pointer;
+		typedef typename Allocator::const_pointer				const_pointer;
+		typedef binary_tree_iterator<value_type>				iterator;
+		typedef binary_tree_const_iterator<value_type>			const_iterator;
+		typedef ft::reverse_iterator<iterator>					reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 
 	private :
 
@@ -132,7 +135,7 @@ class map {
 		~map() {
 			if (!empty())
 				__prev_iter(_root, &map::__node_destroy);
-			__node_destroy(_nil);
+			__list_destroy(_nil);
 		}
 
 		map		&operator = (const map &other) {
@@ -140,6 +143,7 @@ class map {
 				return *this;
 			clear();
 			insert(other.begin(), other.end());
+			return *this;
 		}
 
 		allocator_type	get_allocator() const {
@@ -148,8 +152,16 @@ class map {
 
 		//	Element access
 
-		mapped_type		&at(const key_type &key) {
-			_node_pointer dst = __find(key);
+		mapped_type			&at(const key_type &key) {
+			_node_pointer dst = __find(_root, key);
+			if (dst == _nil)
+				throw std::out_of_range("out of range");
+			else
+				return dst->value->second;
+		}
+
+		const mapped_type	&at(const key_type &key) const {
+			_node_pointer dst = __find(_root, key);
 			if (dst == _nil)
 				throw std::out_of_range("out of range");
 			else
@@ -157,11 +169,8 @@ class map {
 		}
 
 		mapped_type		&operator [] (const key_type &key) {
-			_node_pointer dst = __find(key);
-			if (dst == _nil)
-				return __insert(__node_create(ft::make_pair(key, mapped_type())))->value->second;
-			else
-				return dst->value->second;
+
+			return insert(ft::make_pair(key, mapped_type())).first._M_node->value->second;
 		}
 
 		//	Iterators
@@ -204,16 +213,19 @@ class map {
 
 		size_type				size() const { return _size; }
 
-		size_type				max_size() const { }
+		size_type				max_size() const {
+			return std::min((size_type) std::numeric_limits<difference_type>::max(),
+					std::numeric_limits<size_type>::max() / sizeof(_node) + sizeof(_node_pointer));
+		}
 
 		//	Modifiers
 
 		void		clear() {
 			__prev_iter(_root, &map::__node_destroy);
 			__node_init(_nil);
-			_root = nullptr;
-			_last_left = nullptr;
-			_last_right = nullptr;
+			_root = _nil;
+			_last_left = _nil;
+			_last_right = _nil;
 			_size = 0;
 		}
 
@@ -242,41 +254,44 @@ class map {
 				insert(*first++);
 		}
 
-		void	erase(iterator pos) {
+		void		erase(iterator pos) {
 			__erase(pos._M_node);
-			if (pos._M_node == _root) {
-				if (pos._M_node->left != _nil)
-					_root = pos._M_node->left;
-				else if (pos._M_node->right != _nil)
-					_root = pos._M_node->right;
-			}
 			__node_destroy(pos._M_node);
 			--_size;
 		}
 
-		void	erase(iterator first, iterator last) {
+		void		erase(iterator first, iterator last) {
 			while (first != last)
 				erase(first++);
 		}
 
-		void	swap(map &other) {
+		size_type	erase(const key_type &key) {
+			_node_pointer	elem = __find(_root, key);
 
+			if (elem == _nil)
+				return 0;
+			erase(elem);
+			return 1;
+		}
+
+		void	swap(map &other) {
+			(void)other;
 		}
 
 		//	Lookup
 
 		size_type		count(const key_type &key) const {
-			_node_pointer	node = __find(key);
+			_node_pointer	node = __find(_root, key);
 
 			return node != _nil;
 		}
 
 		iterator		find(const key_type &key) {
-			return iterator(__find(key));		
+			return iterator(__find(_root, key));		
 		}
 
 		const_iterator	find(const key_type &key) const {
-			return const_iterator(__find(key));
+			return const_iterator(__find(_root, key));
 		}
 
 		iterator		upper_bound(const key_type &key) {
@@ -295,72 +310,22 @@ class map {
 			return const_iterator(__lower_bound(_root, key));
 		}
 
-		ft::pair<iterator, iterator>				equeal_range(const key_type &key) {
-			return ft::make_pair(__lower_bound(_root, key), __upper_bound(_root, key));
+		ft::pair<iterator, iterator>				equal_range(const key_type &key) {
+			return ft::make_pair(lower_bound(key), upper_bound(key));
 		}
 
-		ft::pair<const_iterator, const_iterator>	equeal_range(const key_type &key) const {
-			return ft::make_pair(__lower_bound(_root, key), __upper_bound(_root, key));
+		ft::pair<const_iterator, const_iterator>	equal_range(const key_type &key) const {
+			return ft::make_pair(lower_bound(key), upper_bound(key));
 		}
 
 	private :
 
 		void		__erase(_node_pointer node) {
-			if (node->left != _nil) {
-				__rebalance_left(node);
-				if (node->parent != _nil) {
-					__get_parent_direction(node) = node->left;
-					node->left->parent = node->parent;
-				} else {
-					node->left->parent = _nil;
-				}
-			}
-			else if (node->right != _nil) {
-				__rebalance_right(node);
-				if (node->parent != _nil) {
-					__get_parent_direction(node) = node->right;
-					node->right->parent = node->parent;
-				} else {
-					node->right->parent = _nil;
-				}
-			}
-			else if (node->parent != _nil) {
-				__get_parent_direction(node) = _nil;
-			}
+			__tree_rebalance(node);
 		}
 
-		void		__rebalance_left(_node_pointer node) {
-			if (node->right != _nil) {
-				_node_pointer	tmp;
-
-				tmp = __tree_down_to_last_right(node->left);
-				tmp->right = node->right;
-				tmp->right->parent = tmp;
-				node->right = _nil;
-			}
-		}
-
-		void		__rebalance_right(_node_pointer node) {
-			if (node->left != _nil) {
-				_node_pointer	tmp;
-
-				tmp = __tree_down_to_last_left(node->right);
-				tmp->left = node->left;
-				tmp->right->parent = tmp;
-				node->left = _nil;
-			}
-		}
-
-		_node_pointer	__tree_down_to_last_left(_node_pointer p) {
-			if (p->LAST_LEFT != nullptr)
-				return __tree_down_to_last_left(p->left);
-			return p;
-		}
-
-		_node_pointer	__tree_down_to_last_right(_node_pointer p) {
-			if (p->LAST_RIGHT != nullptr)
-				return __tree_down_to_last_right(p->right);
-			return p;
+		void		__tree_rebalance(_node_pointer node) {
+			(void)node;
 		}
 
 		_node_pointer	__insert(_node_pointer new_node) {
@@ -369,6 +334,8 @@ class map {
 				_last_left = _root;
 				_last_right = _root;
 				_nil->parent = _last_right;
+				_nil->left = _last_right;
+				_nil->right = _last_left;
 				return _root;
 			}
 			else {
@@ -410,22 +377,6 @@ class map {
 			return p;
 		}
 
-		_node_pointer	__lower_bound(_node_pointer p, const key_type &key) {
-			if (p == _nil)
-				return p;
-			else if (_comp(key, p->value->first))
-				return __lower_bound(p, key);
-			return p;
-		}
-
-		_node_pointer	__upper_bound(_node_pointer p, const key_type &key) {
-			if (p == _nil)
-				return p;
-			else if (_comp(p->value->first, key))
-				return __upper_bound(p, key);
-			return p;
-		}
-
 		void			__prev_iter(_node_pointer node, void (map::*func)(_node_pointer)) {
 			if (node == _nil)
 				return ;
@@ -443,10 +394,10 @@ class map {
 		}
 
 		_node_pointer	__node_init(_node_pointer nil) {
-			nil->parent = nullptr;
+			nil->parent = _nil;
 			nil->value = nullptr;
-			nil->left = nullptr;
-			nil->right = nullptr;
+			nil->left = _nil;
+			nil->right = _nil;
 			return _nil;
 		}
 
@@ -460,17 +411,25 @@ class map {
 
 		_node_pointer	__node_create(const_reference value) {
 			_node_pointer	new_node = _node_alloc.allocate(1);
-			_node_alloc.construct(new_node);
+			_node_alloc.construct(new_node, _node());
 			new_node->value = _alloc.allocate(1);
 			_alloc.construct(new_node->value, value);
 			return new_node;
 		}
 
 		void			__node_destroy(_node_pointer elem) {
-			_alloc.destroy(elem->value);
-			_alloc.deallocate(elem->value, 1);
+			__value_destroy(elem);
+			__list_destroy(elem);
+		}
+
+		void			__list_destroy(_node_pointer elem) {
 			_node_alloc.destroy(elem);
 			_node_alloc.deallocate(elem, 1);
+		}
+
+		void			__value_destroy(_node_pointer elem) {
+			_alloc.destroy(elem->value);
+			_alloc.deallocate(elem->value, 1);
 		}
 
 		_node_pointer	&__get_parent_direction(_node_pointer node) {
