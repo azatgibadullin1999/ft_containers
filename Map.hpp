@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 14:53:58 by root              #+#    #+#             */
-/*   Updated: 2022/02/22 15:48:57 by root             ###   ########.fr       */
+/*   Updated: 2022/02/24 17:04:24 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,9 +238,11 @@ class map {
 		}
 
 		void		erase(iterator pos) {
-			__erase(pos._M_node);
-			__node_destroy(pos._M_node);
-			--_size;
+			if (!empty()) {
+				__erase(pos._M_node);
+				__node_destroy(pos._M_node);
+				--_size;
+			}
 		}
 
 		void		erase(iterator first, iterator last) {
@@ -307,10 +309,47 @@ class map {
 
 		void		__erase(_node_pointer node) {
 			__tree_rebalance(node);
+			if (node == _last_left) {
+				_last_left = __tree_down_to_last_left(_root);
+				_nil->right = _last_left;
+			}
+			if (node == _last_right) {
+				_last_right = __tree_down_to_last_right(_root);
+				_nil->left = _last_right;
+			}
 		}
 
 		void		__tree_rebalance(_node_pointer node) {
-			(void)node;
+			_node_pointer	tmp;
+
+			if (node->left != _nil) {
+				tmp = __tree_down_to_last_right(node->left);
+				tmp->right = node->right;
+				tmp->right->parent = tmp;
+				if (node == _root)
+					_root = node->left;
+				else
+					__get_parent_direction(node) = node->left;
+				node->left->parent = node->parent;
+			}
+			else if (node->right != _nil) {
+				tmp = __tree_down_to_last_left(node->right);
+				tmp->left = node->left;
+				tmp->left->parent = tmp;
+				if (node == _root)
+					_root = node->right;
+				else
+					__get_parent_direction(node) = node->right;
+				node->right->parent = node->parent;
+			}
+			else {
+				if (node == _root) {
+					_root = _nil;
+					__node_init(_nil);
+				}
+				else
+					__get_parent_direction(node) = _nil;
+			}
 		}
 
 		_node_pointer	__insert(_node_pointer new_node) {
@@ -368,14 +407,6 @@ class map {
 			__prev_iter(node->left, func);
 			__prev_iter(node->right, func);
 			(this->*func)(node);
-		}
-		
-		void			__post_iter(_node_pointer node, void (map::*func)(_node_pointer)) {
-			if (node == _nil)
-				return ;
-			(this->*func)(node);
-			__post_iter(node->left, func);
-			__post_iter(node->right, func);
 		}
 
 		_node_pointer	__node_init(_node_pointer nil) {
