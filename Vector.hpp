@@ -6,14 +6,14 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 17:51:27 by root              #+#    #+#             */
-/*   Updated: 2021/12/29 17:01:25 by root             ###   ########.fr       */
+/*   Updated: 2022/02/22 15:57:52 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
-# include "iterators.hpp"
+# include "iterators/VectorIterator.hpp"
 # include <iostream>
 # include <vector>
 # include <memory>
