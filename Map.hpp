@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 14:53:58 by root              #+#    #+#             */
-/*   Updated: 2022/02/24 17:04:24 by root             ###   ########.fr       */
+/*   Updated: 2022/02/25 13:56:11 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,28 @@ class map {
 
 		//	Member class
 
-		Compare					value_compare;
+		class value_compare {
+			
+			public :
+
+				typedef bool		result_type;
+				typedef value_type	first_argument_type;
+				typedef value_type	second_argument_type;
+
+			protected :
+
+				Compare				_comp;
+
+			public :
+
+				value_compare(Compare comp) :
+					_comp(comp) { }
+
+				~value_compare() { }
+
+				result_type		operator () (const first_argument_type &lhs, const second_argument_type &rhs) const { return _comp(lhs, rhs); }
+
+		} ;
 
 		//	Member fuctions
 
@@ -287,6 +308,12 @@ class map {
 
 		ft::pair<const_iterator, const_iterator>	equal_range(const key_type &key) const { return ft::make_pair(lower_bound(key), upper_bound(key)); }
 
+		key_compare		key_comp() const {
+
+		}
+
+		
+
 	private :
 
 		_node_pointer	__lower_bound(const key_type &key) const {
@@ -456,6 +483,37 @@ class map {
 		}
 
 } ;
+
+
+template <typename Key, typename T>
+bool	operator == (const ft::map<Key, T> &lhs, const ft::map<Key, T> &rhs) {
+	return (lhs.size() == rhs.size()) && ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+}
+
+template <typename Key, typename T>
+bool	operator != (const ft::map<Key, T> &lhs, const ft::map<Key, T> &rhs) {
+	return !(lhs == rhs);
+}
+
+template <typename Key, typename T>
+bool	operator < (const ft::map<Key, T> &lhs, const ft::map<Key, T> &rhs) {
+	return ft::lexicographic_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+}
+
+template <typename Key, typename T>
+bool	operator > (const ft::map<Key, T> &lhs, const ft::map<Key, T> &rhs) {
+	return (rhs < lhs);
+}
+
+template <typename Key, typename T>
+bool	operator >= (const ft::map<Key, T> &lhs, const ft::map<Key, T> &rhs) {
+	return !(lhs < rhs);
+}
+
+template <typename Key, typename T>
+bool	operator <= (const ft::map<Key, T> &lhs, const ft::map<Key, T> &rhs) {
+	return !(lhs > rhs);
+}
 
 
 }
