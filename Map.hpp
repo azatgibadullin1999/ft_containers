@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 14:53:58 by root              #+#    #+#             */
-/*   Updated: 2022/02/25 13:56:11 by root             ###   ########.fr       */
+/*   Updated: 2022/03/03 16:22:59 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,27 +54,6 @@ class map {
 
 	private :
 
-		//	Private Node's typedefs
-
-		typedef binary_node<value_type>								_node;
-		typedef typename Allocator::template rebind<_node>::other	_node_allocator_type;
-		typedef typename _node_allocator_type::pointer				_node_pointer;
-		typedef typename _node_allocator_type::reference			_node_reference;
-
-		//	Private variables
-
-		size_type				_size;
-		key_compare				_comp;
-		allocator_type			_alloc;
-
-		_node_allocator_type	_node_alloc;
-		_node_pointer			_nil;
-		_node_pointer			_root;
-		_node_pointer			_last_left;
-		_node_pointer			_last_right;
-
-	public :
-
 		//	Member class
 
 		class value_compare {
@@ -89,6 +68,7 @@ class map {
 
 				Compare				_comp;
 
+
 			public :
 
 				value_compare(Compare comp) :
@@ -96,15 +76,38 @@ class map {
 
 				~value_compare() { }
 
-				result_type		operator () (const first_argument_type &lhs, const second_argument_type &rhs) const { return _comp(lhs, rhs); }
+				result_type		operator () (const first_argument_type &lhs, const second_argument_type &rhs) const { return _comp(lhs.first, rhs.first); }
 
 		} ;
+
+		//	Private Node's typedefs
+
+		typedef binary_node<value_type>								_node;
+		typedef typename Allocator::template rebind<_node>::other	_node_allocator_type;
+		typedef typename _node_allocator_type::pointer				_node_pointer;
+		typedef typename _node_allocator_type::reference			_node_reference;
+
+		//	Private variables
+
+		size_type				_size;
+		key_compare				_comp;
+		value_compare			_value_compare;
+		allocator_type			_alloc;
+
+		_node_allocator_type	_node_alloc;
+		_node_pointer			_nil;
+		_node_pointer			_root;
+		_node_pointer			_last_left;
+		_node_pointer			_last_right;
+
+	public :
 
 		//	Member fuctions
 
 		map() :
 			_size(0),
 			_comp(),
+			_value_compare(_comp),
 			_node_alloc(),
 			_nil(_node_alloc.allocate(1)),
 			_root(_nil),
@@ -117,6 +120,7 @@ class map {
 					const Allocator &alloc = Allocator()) :
 						_size(0),
 						_comp(comp),
+						_value_compare(_comp),
 						_node_alloc(alloc),
 						_nil(_node_alloc.allocate(1)),
 						_root(_nil),
@@ -132,6 +136,7 @@ class map {
 			const Allocator &alloc = Allocator()) :
 				_size(0),
 				_comp(comp),
+				_value_compare(_comp),
 				_node_alloc(alloc),
 				_nil(_node_alloc.allocate(1)),
 				_root(_nil),
@@ -144,6 +149,7 @@ class map {
 		map(const map &other) :
 			_size(0),
 			_comp(other._comp),
+			_value_compare(_comp),
 			_node_alloc(other._node_alloc),
 			_nil(_node_alloc.allocate(1)),
 			_root(_nil),
@@ -281,7 +287,13 @@ class map {
 		}
 
 		void	swap(map &other) {
-			(void)other;
+			std::swap(this->_size, other._size);
+			std::swap(this->_comp, other._comp);
+			std::swap(this->_value_compare, other._value_compare);
+			std::swap(this->_nil, other._nil);
+			std::swap(this->_root, other._root);
+			std::swap(this->_last_left, other._last_left);
+			std::swap(this->_last_right, other._last_right);
 		}
 
 		//	Lookup
@@ -308,10 +320,9 @@ class map {
 
 		ft::pair<const_iterator, const_iterator>	equal_range(const key_type &key) const { return ft::make_pair(lower_bound(key), upper_bound(key)); }
 
-		key_compare		key_comp() const {
+		key_compare		key_comp() const { return _comp; }
 
-		}
-
+		value_compare	value_comp() const { return _value_compare; }
 		
 
 	private :
