@@ -6,7 +6,7 @@
 /*   By: larlena <larlena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 14:53:58 by root              #+#    #+#             */
-/*   Updated: 2022/06/20 13:17:29 by larlena          ###   ########.fr       */
+/*   Updated: 2022/06/20 21:14:11 by larlena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,7 +224,7 @@ class map {
 
 		size_type				max_size() const {
 			return std::min((size_type) std::numeric_limits<difference_type>::max(),
-					std::numeric_limits<size_type>::max() / sizeof(_node) + sizeof(_node_pointer));
+					std::numeric_limits<size_type>::max() / (sizeof(_node) + sizeof(value_type)));
 		}
 
 		//	Modifiers
