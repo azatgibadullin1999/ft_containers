@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Map.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: larlena <larlena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 14:53:58 by root              #+#    #+#             */
-/*   Updated: 2022/03/03 16:22:59 by root             ###   ########.fr       */
+/*   Updated: 2022/06/20 13:17:29 by larlena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <limits>
 # include "iterators.hpp"
 # include "utils.hpp"
-
 # include <iostream>
 # include <stdlib.h>
 
@@ -449,7 +448,7 @@ class map {
 
 		_node_pointer	__node_init(_node_pointer nil) {
 			nil->parent = _nil;
-			nil->value = nullptr;
+			nil->value = NULL;
 			nil->left = _nil;
 			nil->right = _nil;
 			return _nil;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: larlena <larlena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 17:51:27 by root              #+#    #+#             */
-/*   Updated: 2022/02/22 15:57:52 by root             ###   ########.fr       */
+/*   Updated: 2022/06/20 13:18:03 by larlena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 # include <exception>
 # include "utils.hpp"
 
-# define nullptr NULL
 
 namespace ft {
 
@@ -58,13 +57,13 @@ class vector {
 		vector() :
 			_size(0),
 			_capacity(0),
-			_vec(nullptr),
+			_vec(NULL),
 			_alloc(allocator_type()) { }
 
 		explicit vector(const allocator_type alloc) :
 			_size(0),
 			_capacity(0),
-			_vec(nullptr),
+			_vec(NULL),
 			_alloc(alloc) { } 
 
 		explicit vector(size_type count,

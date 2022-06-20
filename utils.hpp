@@ -3,17 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   utils.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: larlena <larlena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 19:55:24 by root              #+#    #+#             */
-/*   Updated: 2022/02/13 18:56:12 by root             ###   ########.fr       */
+/*   Updated: 2022/06/20 13:17:39 by larlena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UTILS_HPP
 # define UTILS_HPP
-
-# define nullptr NULL
 
 # include "./utils/is_integral.hpp"
 # include "./utils/enable_if.hpp"
