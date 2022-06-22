@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Map.hpp                                            :+:      :+:    :+:   */
+/*   map.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: larlena <larlena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 14:53:58 by root              #+#    #+#             */
-/*   Updated: 2022/06/20 21:14:11 by larlena          ###   ########.fr       */
+/*   Updated: 2022/06/22 15:40:02 by larlena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -495,34 +495,39 @@ class map {
 } ;
 
 
-template <typename Key, typename T>
-bool	operator == (const ft::map<Key, T> &lhs, const ft::map<Key, T> &rhs) {
+template <typename Key, typename T, typename Compare, typename Allocator>
+bool	operator == (const ft::map<Key, T, Compare, Allocator> &lhs, const ft::map<Key, T, Compare, Allocator> &rhs) {
 	return (lhs.size() == rhs.size()) && ft::equal(lhs.begin(), lhs.end(), rhs.begin());
 }
 
-template <typename Key, typename T>
-bool	operator != (const ft::map<Key, T> &lhs, const ft::map<Key, T> &rhs) {
+template <typename Key, typename T, typename Compare, typename Allocator>
+bool	operator != (const ft::map<Key, T, Compare, Allocator> &lhs, const ft::map<Key, T, Compare, Allocator> &rhs) {
 	return !(lhs == rhs);
 }
 
-template <typename Key, typename T>
-bool	operator < (const ft::map<Key, T> &lhs, const ft::map<Key, T> &rhs) {
+template <typename Key, typename T, typename Compare, typename Allocator>
+bool	operator < (const ft::map<Key, T, Compare, Allocator> &lhs, const ft::map<Key, T, Compare, Allocator> &rhs) {
 	return ft::lexicographic_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 }
 
-template <typename Key, typename T>
-bool	operator > (const ft::map<Key, T> &lhs, const ft::map<Key, T> &rhs) {
+template <typename Key, typename T, typename Compare, typename Allocator>
+bool	operator > (const ft::map<Key, T, Compare, Allocator> &lhs, const ft::map<Key, T, Compare, Allocator> &rhs) {
 	return (rhs < lhs);
 }
 
-template <typename Key, typename T>
-bool	operator >= (const ft::map<Key, T> &lhs, const ft::map<Key, T> &rhs) {
+template <typename Key, typename T, typename Compare, typename Allocator>
+bool	operator >= (const ft::map<Key, T, Compare, Allocator> &lhs, const ft::map<Key, T, Compare, Allocator> &rhs) {
 	return !(lhs < rhs);
 }
 
-template <typename Key, typename T>
-bool	operator <= (const ft::map<Key, T> &lhs, const ft::map<Key, T> &rhs) {
+template <typename Key, typename T, typename Compare, typename Allocator>
+bool	operator <= (const ft::map<Key, T, Compare, Allocator> &lhs, const ft::map<Key, T, Compare, Allocator> &rhs) {
 	return !(lhs > rhs);
+}
+
+template <typename Key, typename T, typename Compare, typename Allocator>
+void	swap(ft::map<Key, T, Compare, Allocator> &lhs, ft::map<Key, T, Compare, Allocator> &rhs) {
+	lhs.swap(rhs);
 }
 
 

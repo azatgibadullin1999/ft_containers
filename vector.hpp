@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Vector.hpp                                         :+:      :+:    :+:   */
+/*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: larlena <larlena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 17:51:27 by root              #+#    #+#             */
-/*   Updated: 2022/06/20 13:18:03 by larlena          ###   ########.fr       */
+/*   Updated: 2022/06/22 17:18:27 by larlena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,15 @@
 namespace ft {
 
 
-template <typename T, typename Allocator = std::allocator<T> >
+template <typename T, typename Alloc> class vector;
+template <typename T, typename Alloc> void	swap(vector<T, Alloc> &lhs, vector<T, Alloc> &rhs);
+
+template <typename T, typename Alloc = std::allocator<T> >
 class vector {
 
 	public :
 		typedef T											value_type;
-		typedef Allocator									allocator_type;
+		typedef Alloc									allocator_type;
 		typedef std::size_t									size_type;
 		typedef std::ptrdiff_t								difference_type;
 		typedef typename allocator_type::reference			reference;
@@ -350,6 +353,8 @@ class vector {
 			this->_size = count;
 		}
 
+		friend void	ft::swap<T, Alloc>(vector<T, Alloc> &lhs, vector<T, Alloc> &rhs);
+
 
 } ;
 
@@ -381,6 +386,14 @@ bool	operator >= (const ft::vector<T, Alloc> &lhs, const ft::vector<T, Alloc>&rh
 template <typename T, typename Alloc>
 bool	operator <= (const ft::vector<T, Alloc> &lhs, const ft::vector<T, Alloc>&rhs) {
 	return !(lhs > rhs);
+}
+
+template <typename T, typename Alloc>
+void	swap(ft::vector<T, Alloc> &lhs, ft::vector<T, Alloc> &rhs) {
+	std::swap(lhs._size, rhs._size);
+	std::swap(lhs._capacity, rhs._capacity);
+	std::swap(lhs._vec, rhs._vec);
+	std::swap(lhs._alloc, rhs._alloc);
 }
 
 
