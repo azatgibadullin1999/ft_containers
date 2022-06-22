@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MapIterator.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: larlena <larlena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 14:04:14 by root              #+#    #+#             */
-/*   Updated: 2022/02/13 19:40:03 by root             ###   ########.fr       */
+/*   Updated: 2022/06/22 15:02:22 by larlena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <iterator>
 # include "../utils.hpp"
-# include "../Map.hpp"
+# include "../map.hpp"
 
 
 namespace ft {
