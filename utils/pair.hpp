@@ -28,7 +28,7 @@ struct pair {
 
 
 		pair() :
-		first(0), second(0) { }
+		first(), second() { }
 
 		pair(first_type _first, second_type _second) :
 		first(_first), second(_second) { }
