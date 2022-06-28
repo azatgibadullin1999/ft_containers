@@ -6,7 +6,7 @@
 /*   By: larlena <larlena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 14:04:14 by root              #+#    #+#             */
-/*   Updated: 2022/06/22 15:02:22 by larlena          ###   ########.fr       */
+/*   Updated: 2022/06/28 19:56:07 by larlena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ class binary_tree_iterator : public std::iterator<std::bidirectional_iterator_ta
 		typedef std::bidirectional_iterator_tag		iterator_category;
 
 		binary_tree_iterator() :
-			_M_node(nullptr) { }
+			_M_node(NULL) { }
 
 		binary_tree_iterator(const _node_pointer p) :
 			_M_node(p) { }
@@ -118,7 +118,7 @@ class binary_tree_const_iterator : public std::iterator<std::bidirectional_itera
 		typedef std::bidirectional_iterator_tag			iterator_category;
 
 		binary_tree_const_iterator() :
-			_M_node(nullptr) { }
+			_M_node(NULL) { }
 
 		binary_tree_const_iterator(const _node_pointer p) :
 			_M_node(p) { }

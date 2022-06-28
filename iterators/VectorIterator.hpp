@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   VectorIterator.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: larlena <larlena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 11:08:28 by root              #+#    #+#             */
-/*   Updated: 2021/12/16 15:08:33 by root             ###   ########.fr       */
+/*   Updated: 2022/06/28 19:55:37 by larlena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ class vector_iterator : public std::iterator<std::random_access_iterator_tag, It
 
 	public :
 
-		vector_iterator() : p(nullptr) { }
+		vector_iterator() : p(NULL) { }
 
 		vector_iterator(const Iter _p) : p(_p) { }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reverse_iterator.hpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: larlena <larlena@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 13:24:07 by root              #+#    #+#             */
-/*   Updated: 2021/12/28 16:23:06 by root             ###   ########.fr       */
+/*   Updated: 2022/06/28 19:56:57 by larlena          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ class reverse_iterator : public std::iterator <
 
 	public :
 
-		reverse_iterator() : _iter(nullptr) { }
+		reverse_iterator() : _iter(NULL) { }
 
 		explicit reverse_iterator(iterator_type other) : _iter(other) { }
 
