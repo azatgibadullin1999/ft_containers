@@ -27,13 +27,13 @@ template <typename T>
 template <>
 	struct is_integral_res <true_type> {
 		static const bool value =	1;
-		typedef true_type			type;
+		typedef true_type		type;
 } ;
 
 template <>
 	struct is_integral_res <false_type> {
-		static const bool value =	0;
-		typedef false_type			type;
+		static const bool value = 	0;
+		typedef false_type		type;
 } ;
 
 

@@ -24,10 +24,10 @@ class stack {
 
 	public :
 
-		typedef Container									container_type;
-		typedef typename container_type::value_type			value_type;
-		typedef typename container_type::size_type			size_type;
-		typedef typename container_type::reference			reference;
+		typedef Container					container_type;
+		typedef typename container_type::value_type		value_type;
+		typedef typename container_type::size_type		size_type;
+		typedef typename container_type::reference		reference;
 		typedef typename container_type::const_reference	const_reference;
 
 	protected :
@@ -37,10 +37,10 @@ class stack {
 	public :
 
 		explicit stack(const container_type &cont = container_type()) :
-		_cont(cont) { }
+			_cont(cont) { }
 
 		stack(const stack &other) :
-		_cont(other._cont) { }
+			_cont(other._cont) { }
 
 		~stack() { }
 
@@ -49,17 +49,29 @@ class stack {
 			return *this;
 		}
 
-		reference			top() { return *--this->_cont.end(); }
+		reference	top() {
+			return *--this->_cont.end();
+		}
 
-		const_reference		top() const { return *--this->_cont.end(); }
+		const_reference	top() const {
+			return *--this->_cont.end();
+		}
 
-		bool				empty() const { return this->_cont.empty(); }
+		bool		empty() const {
+			return this->_cont.empty();
+		}
 
-		size_type			size() const { return this->_cont.size(); }
+		size_type	size() const {
+			return this->_cont.size();
+		}
 
-		void				push(const_reference value) { this->_cont.push_back(value); }
+		void		push(const_reference value) {
+			this->_cont.push_back(value);
+		}
 
-		void				pop() { this->_cont.pop_back(); }
+		void		pop() {
+			this->_cont.pop_back();
+		}
 
 
 		template <typename TCom, typename ContainerCom>

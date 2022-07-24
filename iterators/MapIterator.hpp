@@ -26,16 +26,16 @@ class binary_tree_iterator : public std::iterator<std::bidirectional_iterator_ta
 	
 	private :
 
-		typedef ft::binary_node<T>		_node;
-		typedef _node*					_node_pointer;
-		typedef _node&					_node_reference;
+		typedef ft::binary_node<T>	_node;
+		typedef _node*			_node_pointer;
+		typedef _node&			_node_reference;
 
 	public :
 
-		typedef typename _node::value_type			value_type;
-		typedef typename _node::value_type*			pointer;
-		typedef typename _node::value_type&			reference;
-		typedef std::ptrdiff_t						difference_type;
+		typedef typename _node::value_type		value_type;
+		typedef typename _node::value_type*		pointer;
+		typedef typename _node::value_type&		reference;
+		typedef std::ptrdiff_t				difference_type;
 		typedef std::bidirectional_iterator_tag		iterator_category;
 
 		binary_tree_iterator() :
@@ -100,9 +100,9 @@ class binary_tree_const_iterator : public std::iterator<std::bidirectional_itera
 	
 	private :
 
-		typedef ft::binary_node<T>		_node;
-		typedef _node*					_node_pointer;
-		typedef _node&					_node_reference;
+		typedef ft::binary_node<T>	_node;
+		typedef _node*			_node_pointer;
+		typedef _node&			_node_reference;
 
 		# define LAST value
 		# define LAST_PARENT parent->value
@@ -111,11 +111,11 @@ class binary_tree_const_iterator : public std::iterator<std::bidirectional_itera
 
 	public :
 
-		typedef const typename _node::value_type		value_type;
-		typedef const typename _node::value_type*		pointer;
-		typedef const typename _node::value_type&		reference;
-		typedef std::ptrdiff_t							difference_type;
-		typedef std::bidirectional_iterator_tag			iterator_category;
+		typedef const typename _node::value_type	value_type;
+		typedef const typename _node::value_type*	pointer;
+		typedef const typename _node::value_type&	reference;
+		typedef std::ptrdiff_t				difference_type;
+		typedef std::bidirectional_iterator_tag		iterator_category;
 
 		binary_tree_const_iterator() :
 			_M_node(NULL) { }
@@ -136,9 +136,9 @@ class binary_tree_const_iterator : public std::iterator<std::bidirectional_itera
 			return *this;
 		}
 
-		reference		operator * () const { return *_M_node->value; }
+		reference	operator * () const { return *_M_node->value; }
 
-		pointer			operator -> () const { return _M_node->value; }
+		pointer		operator -> () const { return _M_node->value; }
 
 		binary_tree_const_iterator	&operator ++ () {
 			this->_M_node = __tree_increment(this->_M_node);

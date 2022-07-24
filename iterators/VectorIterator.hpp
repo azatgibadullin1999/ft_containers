@@ -32,8 +32,8 @@ class vector_iterator : public std::iterator<std::random_access_iterator_tag, It
 
 		typedef typename iterator_traits::iterator_category	iterator_category;
 		typedef typename iterator_traits::value_type		value_type;
-		typedef typename iterator_traits::reference			reference;
-		typedef typename iterator_traits::pointer			pointer;
+		typedef typename iterator_traits::reference		reference;
+		typedef typename iterator_traits::pointer		pointer;
 		typedef typename iterator_traits::difference_type	difference_type;
 
 	private :
@@ -53,7 +53,7 @@ class vector_iterator : public std::iterator<std::random_access_iterator_tag, It
 
 			// INPUT_ITERATOR
 
-		vector_iterator		&operator = (const vector_iterator& other) {
+		vector_iterator	&operator = (const vector_iterator& other) {
 			this->p = other.p;
 			return *this;
 		}
@@ -115,7 +115,7 @@ class vector_iterator : public std::iterator<std::random_access_iterator_tag, It
 
 		difference_type	operator - (const vector_iterator &other) { return this->p - other.p; }
 
-		reference		operator [] (const size_t i) const { return *(this->p + i); }
+		reference	operator [] (const size_t i) const { return *(this->p + i); }
 
 		pointer const	&base() const { return p; }
 

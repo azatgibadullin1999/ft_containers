@@ -19,9 +19,9 @@ namespace ft {
 
 template <class Iter>
 struct iterator_traits {
-	typedef typename Iter::iterator_category	iterator_category;
+	typedef typename Iter::iterator_category		iterator_category;
 	typedef typename Iter::value_type			value_type;
-	typedef typename Iter::difference_type		difference_type;
+	typedef typename Iter::difference_type			difference_type;
 	typedef typename Iter::reference			reference;
 	typedef typename Iter::pointer				pointer;
 } ;
@@ -29,19 +29,19 @@ struct iterator_traits {
 template <typename T>
 struct iterator_traits<T*> {
 	typedef typename std::random_access_iterator_tag	iterator_category;
-	typedef T											value_type;
-	typedef typename std::ptrdiff_t						difference_type;
-	typedef T&											reference;
-	typedef T*											pointer;							
+	typedef T						value_type;
+	typedef typename std::ptrdiff_t				difference_type;
+	typedef T&						reference;
+	typedef T*						pointer;							
 } ;
 
 template <typename T>
 struct iterator_traits<const T*> {
 	typedef typename std::random_access_iterator_tag	iterator_category;
-	typedef T											value_type;
-	typedef typename std::ptrdiff_t						difference_type;
-	typedef const T&									reference;
-	typedef const T*									pointer;							
+	typedef T						value_type;
+	typedef typename std::ptrdiff_t				difference_type;
+	typedef const T&					reference;
+	typedef const T*					pointer;							
 } ;
 
 

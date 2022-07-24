@@ -34,11 +34,11 @@ class reverse_iterator : public std::iterator <
 
 			// TYPDEF
 
-		typedef Iterator									iterator_type;
+		typedef Iterator					iterator_type;
 		typedef typename iterator_traits::iterator_category	iterator_category;
 		typedef	typename iterator_traits::value_type		value_type;
-		typedef typename iterator_traits::reference			reference;
-		typedef typename iterator_traits::pointer			pointer;
+		typedef typename iterator_traits::reference		reference;
+		typedef typename iterator_traits::pointer		pointer;
 		typedef	typename iterator_traits::difference_type	difference_type;
 
 	protected :

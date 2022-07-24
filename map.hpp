@@ -35,39 +35,33 @@ class map {
 
 		// Public typedefs
 
-		typedef Key												key_type;
-		typedef T												mapped_type;
-		typedef ft::pair<const Key, T>							value_type;
-		typedef std::size_t										size_type;
-		typedef std::ptrdiff_t									difference_type;
-		typedef Compare											key_compare;
-		typedef Allocator										allocator_type;
-		typedef typename Allocator::reference					reference;
-		typedef typename Allocator::const_reference				const_reference;
-		typedef typename Allocator::pointer						pointer;
-		typedef typename Allocator::const_pointer				const_pointer;
-		typedef binary_tree_iterator<value_type>				iterator;
-		typedef binary_tree_const_iterator<value_type>			const_iterator;
-		typedef ft::reverse_iterator<iterator>					reverse_iterator;
-		typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
+		typedef Key					key_type;
+		typedef T					mapped_type;
+		typedef ft::pair<const Key, T>			value_type;
+		typedef std::size_t				size_type;
+		typedef std::ptrdiff_t				difference_type;
+		typedef Compare					key_compare;
+		typedef Allocator				allocator_type;
+		typedef typename Allocator::reference		reference;
+		typedef typename Allocator::const_reference	const_reference;
+		typedef typename Allocator::pointer		pointer;
+		typedef typename Allocator::const_pointer	const_pointer;
+		typedef binary_tree_iterator<value_type>	iterator;
+		typedef binary_tree_const_iterator<value_type>	const_iterator;
+		typedef ft::reverse_iterator<iterator>		reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 	private :
 
 		//	Member class
 
 		class value_compare {
-			
 			public :
-
 				typedef bool		result_type;
 				typedef value_type	first_argument_type;
 				typedef value_type	second_argument_type;
-
 			protected :
-
-				Compare				_comp;
-
-
+				Compare	_comp;
 			public :
 
 				value_compare(Compare comp) :
@@ -81,23 +75,23 @@ class map {
 
 		//	Private Node's typedefs
 
-		typedef binary_node<value_type>								_node;
+		typedef binary_node<value_type>					_node;
 		typedef typename Allocator::template rebind<_node>::other	_node_allocator_type;
-		typedef typename _node_allocator_type::pointer				_node_pointer;
-		typedef typename _node_allocator_type::reference			_node_reference;
+		typedef typename _node_allocator_type::pointer			_node_pointer;
+		typedef typename _node_allocator_type::reference		_node_reference;
 
 		//	Private variables
 
-		size_type				_size;
-		key_compare				_comp;
-		value_compare			_value_compare;
-		allocator_type			_alloc;
+		size_type		_size;
+		key_compare		_comp;
+		value_compare		_value_compare;
+		allocator_type		_alloc;
 
 		_node_allocator_type	_node_alloc;
-		_node_pointer			_nil;
-		_node_pointer			_root;
-		_node_pointer			_last_left;
-		_node_pointer			_last_right;
+		_node_pointer		_nil;
+		_node_pointer		_root;
+		_node_pointer		_last_left;
+		_node_pointer		_last_right;
 
 	public :
 
@@ -115,21 +109,21 @@ class map {
 				__node_init(_nil);
 			}
 
-		explicit map(const Compare &comp,
-					const Allocator &alloc = Allocator()) :
-						_size(0),
-						_comp(comp),
-						_value_compare(_comp),
-						_node_alloc(alloc),
-						_nil(_node_alloc.allocate(1)),
-						_root(_nil),
-						_last_left(_nil),
-						_last_right(_nil) {
-							__node_init(_nil);
-						}
+		explicit map(	const Compare &comp,
+				const Allocator &alloc = Allocator()) :
+					_size(0),
+					_comp(comp),
+					_value_compare(_comp),
+					_node_alloc(alloc),
+					_nil(_node_alloc.allocate(1)),
+					_root(_nil),
+					_last_left(_nil),
+					_last_right(_nil) {
+						__node_init(_nil);
+					}
 
 		template <typename InputIt>
-		map(InputIt first,
+		map(	InputIt first,
 			InputIt last,
 			const Compare &comp = Compare(),
 			const Allocator &alloc = Allocator()) :
@@ -178,7 +172,7 @@ class map {
 
 		//	Element access
 
-		mapped_type			&at(const key_type &key) {
+		mapped_type		&at(const key_type &key) {
 			_node_pointer dst = __find(_root, key);
 			if (dst == _nil)
 				throw std::out_of_range("out of range");
@@ -200,29 +194,48 @@ class map {
 
 		//	Iterators
 
-		iterator				begin() { return iterator(_last_left); }
-		
-		const_iterator			begin() const { return const_iterator(_last_left); }
+		iterator		begin() {
+			return iterator(_last_left); }
+				
+		const_iterator		begin() const {
+			return const_iterator(_last_left);
+		}
 
-		iterator				end() { return iterator(_nil); }
+		iterator		end() {
+			return iterator(_nil);
+		}
 
-		const_iterator			end() const { return const_iterator(_nil); }
+		const_iterator		end() const {
+			return const_iterator(_nil);
+		}
 
-		reverse_iterator		rbegin() { return reverse_iterator(end()); }
+		reverse_iterator	rbegin() {
+			return reverse_iterator(end());
+		}
 
-		const_reverse_iterator	rbegin() const { return const_reverse_iterator(end()); }
+		const_reverse_iterator	rbegin() const {
+			return const_reverse_iterator(end());
+		}
 
-		reverse_iterator		rend() { return reverse_iterator(begin()); }
+		reverse_iterator	rend() {
+			return reverse_iterator(begin());
+		}
 
-		const_reverse_iterator	rend() const { return const_reverse_iterator(begin()); }
+		const_reverse_iterator	rend() const {
+			return const_reverse_iterator(begin());
+		}
 
 		//	Capacity
 
-		bool					empty() const { return !_size; }
+		bool		empty() const {
+			return !_size;
+		}
 
-		size_type				size() const { return _size; }
+		size_type	size() const {
+			return _size;
+		}
 
-		size_type				max_size() const {
+		size_type	max_size() const {
 			return std::min((size_type) std::numeric_limits<difference_type>::max(),
 					std::numeric_limits<size_type>::max() / (sizeof(_node) + sizeof(value_type)));
 		}
@@ -252,13 +265,13 @@ class map {
 			}
 		}
 
-		iterator					insert(iterator hint, const_reference value) {
+		iterator			insert(iterator hint, const_reference value) {
 			(void)hint;
 			return insert(value).first;
 		}
 
 		template <typename InputIt>
-		void						insert(InputIt first, InputIt last) {
+		void				insert(InputIt first, InputIt last) {
 			while (first != last)
 				insert(*first++);
 		}
@@ -297,31 +310,51 @@ class map {
 
 		//	Lookup
 
-		size_type		count(const key_type &key) const {
+		size_type	count(const key_type &key) const {
 			_node_pointer	node = __find(_root, key);
 
 			return node != _nil;
 		}
 
-		iterator		find(const key_type &key) { return iterator(__find(_root, key)); }
+		iterator	find(const key_type &key) {
+			return iterator(__find(_root, key));
+		}
 
-		const_iterator	find(const key_type &key) const { return const_iterator(__find(_root, key)); }
+		const_iterator	find(const key_type &key) const {
+			return const_iterator(__find(_root, key));
+		}
 
-		iterator		upper_bound(const key_type &key) { return iterator(__upper_bound(key)); }
+		iterator	upper_bound(const key_type &key) {
+			return iterator(__upper_bound(key));
+		}
 
-		const_iterator	upper_bound(const key_type &key) const { return const_iterator(__upper_bound(key)); }
+		const_iterator	upper_bound(const key_type &key) const {
+			return const_iterator(__upper_bound(key));
+		}
 
-		iterator		lower_bound(const key_type &key) { return iterator(__lower_bound(key)); }
+		iterator	lower_bound(const key_type &key) {
+			return iterator(__lower_bound(key));
+		}
 
-		const_iterator	lower_bound(const key_type &key) const { return const_iterator(__lower_bound(key)); }
+		const_iterator	lower_bound(const key_type &key) const {
+			return const_iterator(__lower_bound(key));
+		}
 
-		ft::pair<iterator, iterator>				equal_range(const key_type &key) { return ft::make_pair(lower_bound(key), upper_bound(key)); }
+		ft::pair<iterator, iterator>			equal_range(const key_type &key) {
+			return ft::make_pair(lower_bound(key), upper_bound(key));
+		}
 
-		ft::pair<const_iterator, const_iterator>	equal_range(const key_type &key) const { return ft::make_pair(lower_bound(key), upper_bound(key)); }
+		ft::pair<const_iterator, const_iterator>	equal_range(const key_type &key) const {
+			return ft::make_pair(lower_bound(key), upper_bound(key));
+		}
 
-		key_compare		key_comp() const { return _comp; }
+		key_compare	key_comp() const {
+			return _comp;
+		}
 
-		value_compare	value_comp() const { return _value_compare; }
+		value_compare	value_comp() const {
+			return _value_compare;
+		}
 		
 
 	private :

@@ -22,7 +22,7 @@ template <bool, typename T = void>
 
 template <typename T>
 	struct enable_if <true, T> {
-		typedef T		type;
+		typedef T	type;
 	} ;
 
 

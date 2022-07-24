@@ -34,23 +34,23 @@ template <typename T, typename Alloc = std::allocator<T> >
 class vector {
 
 	public :
-		typedef T											value_type;
-		typedef Alloc									allocator_type;
-		typedef std::size_t									size_type;
-		typedef std::ptrdiff_t								difference_type;
-		typedef typename allocator_type::reference			reference;
+		typedef T						value_type;
+		typedef Alloc						allocator_type;
+		typedef std::size_t					size_type;
+		typedef std::ptrdiff_t					difference_type;
+		typedef typename allocator_type::reference		reference;
 		typedef typename allocator_type::const_reference	const_reference;
-		typedef typename allocator_type::pointer			pointer;
+		typedef typename allocator_type::pointer		pointer;
 		typedef typename allocator_type::const_pointer		const_pointer;
-		typedef ft::vector_iterator<pointer>				iterator;
-		typedef ft::vector_iterator<const_pointer>			const_iterator;
-		typedef ft::reverse_iterator<iterator>				reverse_iterator;
+		typedef ft::vector_iterator<pointer>			iterator;
+		typedef ft::vector_iterator<const_pointer>		const_iterator;
+		typedef ft::reverse_iterator<iterator>			reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 
 	private :
-		size_type		_size;
-		size_type		_capacity;
-		pointer			_vec;
+		size_type	_size;
+		size_type	_capacity;
+		pointer		_vec;
 		allocator_type	_alloc;
 
 	public :
@@ -70,20 +70,20 @@ class vector {
 			_alloc(alloc) { } 
 
 		explicit vector(size_type count,
-						const_reference value = T(),
-						allocator_type alloc = allocator_type()) :
-							_alloc(alloc) {
-								__hidden_constructor(count, value, true_type());
-							}
+				const_reference value = T(),
+				allocator_type alloc = allocator_type()) :
+					_alloc(alloc) {
+						__hidden_constructor(count, value, true_type());
+					}
 
 		template <typename InputIt>
-		vector(InputIt first,
-				InputIt last,
-				const allocator_type alloc = allocator_type()) :
-					_alloc(alloc) {
-						typedef typename ft::is_integral<InputIt>::type		integral;
-						__hidden_constructor(first, last, integral());
-					}
+		vector(	InputIt first,
+			InputIt last,
+			const allocator_type alloc = allocator_type()) :
+				_alloc(alloc) {
+					typedef typename ft::is_integral<InputIt>::type		integral;
+					__hidden_constructor(first, last, integral());
+				}
 
 		vector(const vector &other) :
 			_size(other._size),
@@ -122,7 +122,7 @@ class vector {
 
 			//	ELEMENT ACCESS
 
-		reference		at(size_type pos) {
+		reference	at(size_type pos) {
 			if (pos >= this->_size)
 				throw std::out_of_range("you go out of range");
 			return this->_vec[pos];
@@ -134,45 +134,81 @@ class vector {
 			return this->_vec[pos];
 		}
 
-		reference		operator [] (size_type pos) { return this->_vec[pos]; }
+		reference	operator [] (size_type pos) {
+			return this->_vec[pos];
+		}
 
-		const_reference	operator [] (size_type pos) const { return this->_vec[pos]; }
+		const_reference	operator [] (size_type pos) const {
+			return this->_vec[pos];
+		}
 
-		reference		front() { return this->_vec[0]; }
+		reference	front() {
+			return this->_vec[0];
+		}
 
-		const_reference	front() const { return this->_vec[0]; }
+		const_reference	front() const {
+			return this->_vec[0];
+		}
 
-		reference		back() { return this->_vec[this->_size - 1]; }
+		reference	back() {
+			return this->_vec[this->_size - 1];
+		}
 
-		const_reference	back() const { return this->_vec[this->_size - 1]; }
+		const_reference	back() const {
+			return this->_vec[this->_size - 1];
+		}
 
-		pointer			data() { return (this->_vec); }
+		pointer		data() {
+			return (this->_vec);
+		}
 
-		const_pointer	data() const { return (this->_vec); }
+		const_pointer	data() const {
+			return (this->_vec);
+		}
 
 			//	ITERATORS
 
-		iterator				begin() { return iterator(this->_vec); }
+		iterator		begin() {
+			return iterator(this->_vec);
+		}
 
-		const_iterator			begin() const { return const_iterator(this->_vec); }
+		const_iterator		begin() const {
+			return const_iterator(this->_vec);
+		}
 
-		iterator				end() { return iterator(&this->_vec[this->_size]); }
+		iterator		end() {
+			return iterator(&this->_vec[this->_size]);
+		}
 
-		const_iterator			end() const { return const_iterator(&this->_vec[this->_size]); }
+		const_iterator		end() const {
+			return const_iterator(&this->_vec[this->_size]);
+		}
 
-		reverse_iterator		rbegin() { return reverse_iterator(this->end()); }
+		reverse_iterator	rbegin() {
+			return reverse_iterator(this->end());
+		}
 
-		const_reverse_iterator	rbegin() const { return const_revese_iterator(this->end()); }
+		const_reverse_iterator	rbegin() const {
+			return const_revese_iterator(this->end());
+		}
 
-		reverse_iterator		rend() { return reverse_iterator(this->begin()); }
+		reverse_iterator	rend() {
+			return reverse_iterator(this->begin());
+		}
 
-		const_reverse_iterator	rend() const { return const_reverse_iterator(this->begin()); }
+		const_reverse_iterator	rend() const {
+			return const_reverse_iterator(this->begin());
+		}
 
 			//	CAPACITY
 
-		bool		empty() const { return !static_cast<bool>(this->_size); }
+		bool		empty() const {
+			return !static_cast<bool>(this->_size);
+		}
 
-		size_type	size() const { return this->_size; }
+		size_type	size() const {
+			return this->_size;
+		}
 
 		size_type	max_size() const {
 			return std::min((size_type) std::numeric_limits<difference_type>::max(),
@@ -195,7 +231,9 @@ class vector {
 			}
 		}
 
-		size_type	capacity() const { return this->_capacity; }
+		size_type	capacity() const {
+			return this->_capacity;
+		}
 
 			//	MODIFIERS
 
@@ -254,8 +292,7 @@ class vector {
 			if (count > this->_size) {
 				for (size_type i = this->_size; i < count; i++)
 					this->_alloc.construct(&this->_vec[i], value);
-			}
-			else {
+			} else {
 				for (size_type i = count; i < this->_size; i++)
 					this->_alloc.destroy(&this->_vec[i]);
 			}
